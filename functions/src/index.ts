@@ -129,14 +129,18 @@ export const measureLatency = functions.https.onRequest(async (req, res) => {
   for (let i = 0; i < 10; i++) {
     try {
       const results = await axios.default.get(url);
-      functions.logger.log("Batch results:", results);
+      functions.logger.log("Batch results:", results.data);
       timings.push(...(results.data.raw as number[]));
     } catch (err) {
       functions.logger.error("batch", i, "failed with err. Retrying", err);
       i--;
     } finally {
       // Kill function to work around memory leak
-      await axios.default.get(url + "?kill=true");
+      try {
+        await axios.default.get(url + "?kill=true");
+      } catch (err) {
+        // noop
+      }
     }
   }
 
