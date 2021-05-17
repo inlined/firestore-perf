@@ -1,0 +1,202 @@
+{
+  "before": {
+    "_fieldsProto": {
+      "array_field": {
+        "arrayValue": {
+          "values": [
+            {
+              "stringValue": "string_element"
+            }
+          ]
+        }
+      },
+      "boolean_field": {
+        "booleanValue": true
+      },
+      "geopoint_field": {
+        "geoPointValue": {
+          "latitude": 42,
+          "longitude": 64
+        }
+      },
+      "map_field": {
+        "mapValue": {
+          "fields": {
+            "string_key": {
+              "stringValue": "string_value"
+            }
+          }
+        }
+      },
+      "null_field": {
+        "nullValue": null
+      },
+      "number_field": {
+        "integerValue": "42"
+      },
+      "reference": {
+        "referenceValue": "projects/inlined-junkdrawer/databases/(default)/documents/users/userId"
+      },
+      "string_field": {
+        "stringValue": "string_value"
+      },
+      "timestamp": {
+        "timestampValue": {
+          "seconds": 1621238520
+        }
+      }
+    },
+    "_ref": {
+      "_firestore": {
+        "_settings": {
+          "projectId": "inlined-junkdrawer",
+          "firebaseVersion": "9.8.0",
+          "libName": "gccl",
+          "libVersion": "4.11.1 fire/9.8.0"
+        },
+        "_settingsFrozen": false,
+        "_serializer": {
+          "allowUndefined": false
+        },
+        "_projectId": "inlined-junkdrawer",
+        "registeredListenersCount": 0,
+        "bulkWritersCount": 0,
+        "_backoffSettings": {
+          "initialDelayMs": 100,
+          "maxDelayMs": 60000,
+          "backoffFactor": 1.3
+        },
+        "_clientPool": {
+          "concurrentOperationLimit": 100,
+          "maxIdleClients": 1,
+          "activeClients": {},
+          "failedClients": {},
+          "terminated": false,
+          "terminateDeferred": {
+            "promise": {}
+          }
+        }
+      },
+      "_path": {
+        "segments": [
+          "collection",
+          "documentID"
+        ],
+        "projectId": "inlined-junkdrawer",
+        "databaseId": "(default)"
+      },
+      "_converter": {}
+    },
+    "_serializer": {
+      "allowUndefined": false
+    },
+    "_createTime": {
+      "_seconds": 1621277145,
+      "_nanoseconds": 316415000
+    },
+    "_updateTime": {
+      "_seconds": 1621277381,
+      "_nanoseconds": 674287000
+    }
+  },
+  "after": {
+    "_fieldsProto": {
+      "array_field": {
+        "arrayValue": {
+          "values": [
+            {
+              "stringValue": "string_element2"
+            }
+          ]
+        }
+      },
+      "boolean_field": {
+        "booleanValue": true
+      },
+      "geopoint_field": {
+        "geoPointValue": {
+          "latitude": 42,
+          "longitude": 64
+        }
+      },
+      "map_field": {
+        "mapValue": {
+          "fields": {
+            "string_key": {
+              "stringValue": "string_value"
+            }
+          }
+        }
+      },
+      "null_field": {
+        "nullValue": null
+      },
+      "number_field": {
+        "integerValue": "42"
+      },
+      "reference": {
+        "referenceValue": "projects/inlined-junkdrawer/databases/(default)/documents/users/userId"
+      },
+      "string_field": {
+        "stringValue": "string_value"
+      },
+      "timestamp": {
+        "timestampValue": {
+          "seconds": 1621238520
+        }
+      }
+    },
+    "_ref": {
+      "_firestore": {
+        "_settings": {
+          "projectId": "inlined-junkdrawer",
+          "firebaseVersion": "9.8.0",
+          "libName": "gccl",
+          "libVersion": "4.11.1 fire/9.8.0"
+        },
+        "_settingsFrozen": false,
+        "_serializer": {
+          "allowUndefined": false
+        },
+        "_projectId": "inlined-junkdrawer",
+        "registeredListenersCount": 0,
+        "bulkWritersCount": 0,
+        "_backoffSettings": {
+          "initialDelayMs": 100,
+          "maxDelayMs": 60000,
+          "backoffFactor": 1.3
+        },
+        "_clientPool": {
+          "concurrentOperationLimit": 100,
+          "maxIdleClients": 1,
+          "activeClients": {},
+          "failedClients": {},
+          "terminated": false,
+          "terminateDeferred": {
+            "promise": {}
+          }
+        }
+      },
+      "_path": {
+        "segments": [
+          "collection",
+          "documentID"
+        ],
+        "projectId": "inlined-junkdrawer",
+        "databaseId": "(default)"
+      },
+      "_converter": {}
+    },
+    "_serializer": {
+      "allowUndefined": false
+    },
+    "_createTime": {
+      "_seconds": 1621277145,
+      "_nanoseconds": 316415000
+    },
+    "_updateTime": {
+      "_seconds": 1621277381,
+      "_nanoseconds": 674287000
+    }
+  }
+}

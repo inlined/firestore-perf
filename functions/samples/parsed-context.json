@@ -1,0 +1,13 @@
+{
+  "eventId": "d6256c27-81dc-4501-ae69-2526ef1a2a27-1",
+  "eventType": "google.firestore.document.write",
+  "notSupported": {},
+  "params": {
+    "document": "documentID"
+  },
+  "resource": {
+    "service": "firestore.googleapis.com",
+    "name": "projects/inlined-junkdrawer/databases/(default)/documents/collection/documentID"
+  },
+  "timestamp": "2021-05-17T18:49:41.674287Z"
+}
