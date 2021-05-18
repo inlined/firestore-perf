@@ -143,12 +143,16 @@ export const measureLatency = functions.runWith({timeoutSeconds: 540}).https.onR
   }
   await Promise.all(promises);
 
-  let stats = require('simple-statistics') as {quantile: (x: number[], p: number) => number};
+  let stats = require('simple-statistics') as {
+      quantile: (x: number[], p: number) => number,
+      mean: (x: number[]) => number,
+  };
   res.json({
       p50: stats.quantile(timings, 0.5),
       p90: stats.quantile(timings, .9),
       p95: stats.quantile(timings, 0.95),
       p99: stats.quantile(timings, 0.99),
+      mean: stats.mean(timings),
       raw: timings.sort(),
     });
 })
@@ -168,7 +172,7 @@ export const measureOnce = functions.runWith({maxInstances: 40, memory: "256MB"}
       let sdk = require('firebase-functions');
       let stop: Date | undefined;
       const func = sdk.firestore.document("collection/{documentId}").onWrite(() => {
-        stop = new Date(); 
+        stop = new Date();
       });
       await func(rawData, rawContext);
       timings.push(stop!.getTime() - start.getTime());
