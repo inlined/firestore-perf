@@ -123,37 +123,37 @@ const rawContext = {
   timestamp: "2021-05-17T18:49:46.247615Z"
 };
 
-export const measureLatency = functions.https.onRequest(async (req, res) => {
+export const measureLatency = functions.runWith({timeoutSeconds: 540}).https.onRequest(async (req, res) => {
   const url = `https://${req.hostname}/measureOnce`;
   let timings: number[] = [];
-  for (let i = 0; i < 10; i++) {
-    try {
-      const results = await axios.default.get(url);
-      functions.logger.log("Batch results:", results.data);
-      timings.push(...(results.data.raw as number[]));
-    } catch (err) {
-      functions.logger.error("batch", i, "failed with err. Retrying", err);
-      i--;
-    } finally {
-      // Kill function to work around memory leak
-      try {
-        await axios.default.get(url + "?kill=true");
-      } catch (err) {
-        // noop
+  let promises: Promise<void>[] = [];
+  for (let shard = 0; shard < 30; shard++) {
+    promises.push((async () => {
+      while (true) {
+        try {
+          const results = await axios.default.get(url);
+          timings.push(...(results.data.raw as number[]));
+          functions.logger.debug("Completed shard", shard);
+          return;
+        } catch (err) {
+          functions.logger.debug("Retrying failed shard", shard);
+        }
       }
-    }
+    })());
   }
+  await Promise.all(promises);
 
   let stats = require('simple-statistics') as {quantile: (x: number[], p: number) => number};
   res.json({
-    p50: stats.quantile(timings, 0.5),
-    p90: stats.quantile(timings, .9),
-    p95: stats.quantile(timings, 0.95),
-    raw: timings,
-  });
+      p50: stats.quantile(timings, 0.5),
+      p90: stats.quantile(timings, .9),
+      p95: stats.quantile(timings, 0.95),
+      p99: stats.quantile(timings, 0.99),
+      raw: timings.sort(),
+    });
 })
 
-export const measureOnce = functions.runWith({maxInstances: 1, memory: "256MB"}).https.onRequest(async (req, res) => {
+export const measureOnce = functions.runWith({maxInstances: 40, memory: "256MB"}).https.onRequest(async (req, res) => {
   if (req.query.kill) {
     console.log("Killing");
     throw new Error("Intentional death");
