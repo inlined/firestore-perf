@@ -8,7 +8,7 @@ to die. A top-level function fans out a benchmark to multiple shards which may e
 complete or run out of memory. After a successful run from N shards, basic stats
 are calculated and displayed.
 
-You can test this out by running ./test.sh <projectId>
+You can test this out by running `./test.sh <projectId>`
 
 ## Results
 ### TL;DR:
