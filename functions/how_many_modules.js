@@ -1,13 +1,8 @@
-import * as functions from "firebase-functions";
-import * as axios from 'axios';
+process.env.GCLOUD_PROJECT = "project";
 
-function clearCache() {
-  for (const key of Object.keys(require.cache)) {
-    delete require.cache[key];
-  }
-}
+const functions = require('firebase-functions');
 
-const rawData = {
+let data = {
   "oldValue": {
     "createTime": "2021-05-17T18:45:45.316415Z",
     "fields": {
@@ -111,8 +106,9 @@ const rawData = {
     "name": "projects/inlined-junkdrawer/databases/(default)/documents/collection/documentID",
     "updateTime": "2021-05-17T18:49:46.247615Z"
   }
-}
-const rawContext = {
+};
+
+let context = {
   eventId: "b818b6e1-363c-4b34-b823-ab17d0328da5-0",
   eventType: "providers/cloud.firestore/eventTypes/document.write",
   notSupported: {},
@@ -121,73 +117,8 @@ const rawContext = {
   },
   resource: "projects/inlined-junkdrawer/databases/(default)/documents/collection/documentID",
   timestamp: "2021-05-17T18:49:46.247615Z"
-};
+}
 
-export const measureLatency = functions.runWith({timeoutSeconds: 540}).https.onRequest(async (req, res) => {
-  const url = `https://${req.hostname}/measureOnce`;
-  let timings: number[] = [];
-  let promises: Promise<void>[] = [];
-  for (let shard = 0; shard < 60; shard++) {
-    promises.push((async () => {
-      while (true) {
-        try {
-          const results = await axios.default.get(url);
-          timings.push(...(results.data.raw as number[]));
-          functions.logger.debug("Completed shard", shard);
-          return;
-        } catch (err) {
-          functions.logger.debug("Retrying failed shard", shard);
-        }
-      }
-    })());
-  }
-  await Promise.all(promises);
-
-  let stats = require('simple-statistics') as {
-      quantile: (x: number[], p: number) => number,
-      mean: (x: number[]) => number,
-  };
-  res.json({
-      p50: stats.quantile(timings, 0.5),
-      p90: stats.quantile(timings, .9),
-      p95: stats.quantile(timings, 0.95),
-      p99: stats.quantile(timings, 0.99),
-      mean: stats.mean(timings),
-      raw: timings.sort(),
-    });
-})
-
-export const measureOnce = functions.runWith({maxInstances: 100, memory: "256MB"}).https.onRequest(async (req, res) => {
-  if (req.query.kill) {
-    console.log("Killing");
-    throw new Error("Intentional death");
-  }
-  const times = Number(req.body.times || 20);
-  console.log("Running", times, "times");
-  let timings: number[] = [];
-  try {
-    for (let time = 0; time < times; time++) {
-      clearCache();
-      const start = new Date();
-      let sdk = require('firebase-functions');
-      let stop: Date | undefined;
-      const func = sdk.firestore.document("collection/{documentId}").onWrite(() => {
-        stop = new Date();
-      });
-      await func(rawData, rawContext);
-      timings.push(stop!.getTime() - start.getTime());
-    }
-  } catch(err) {
-    console.error("Got error", err);
-    throw err;
-  }
-
-  console.log("Done with all iterations");
-  let stats = require('simple-statistics') as {quantile: (x: number[], p: number) => number};
-  res.json({
-    p50: stats.quantile(timings, 0.5),
-    p90: stats.quantile(timings, .9),
-    p95: stats.quantile(timings, 0.95),
-    raw: timings,
-  });
-});
+console.log(`Loaded ${Object.keys(require.cache).length} keys with functions SDK`);
+functions.firestore.document('abc/123').onWrite(() => Promise.resolve())(data, context);
+console.log(`Loaded ${Object.keys(require.cache).length} keys with function execution`);
